@@ -16,22 +16,25 @@ class SymptomController extends Controller
     }
     public function index()
     {
-        // Logic to return a list of symptoms
+        return $this->symptomService->getAllSymptoms();
     }
     public function show($id)
     {
-        // Logic to return a specific symptom by ID
+        return $this->symptomService->getSymptomById($id);
     }
     public function store(SymptomRequest $request)
     {
         // Logic to create a new symptom
+        return $this->symptomService->storeSymptom($request->all());
     }
     public function update(SymptomRequest $request, $id)
     {
         // Logic to update an existing symptom
+        return $this->symptomService->updateSymptom($id, $request->all());
     }
     public function destroy($id)
     {
         // Logic to delete a symptom
+        return $this->symptomService->destroySymptom($id);
     }
 }
