@@ -1,8 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Patient\Auth\AuthController;
-use App\Http\Controllers\Api\Doctor\Symptom\SymptomController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\Patient\Appointment\AppointmentController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/patient/auth')->group(function () {
@@ -16,10 +15,10 @@ Route::prefix('/patient/auth')->group(function () {
 
 Route::group(
     [
-        'prefix' => 'doctor',
-        'middleware' => ['auth:sanctum']
+        'prefix' => 'patient',
+        'middleware' => ['auth:patient']
     ],
     function () {
-        Route::apiResource('symptoms', SymptomController::class);
+        Route::apiResource('appointments', AppointmentController::class);
     }
 );

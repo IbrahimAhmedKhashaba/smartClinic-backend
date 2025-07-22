@@ -6,6 +6,7 @@ use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Patient\Auth\RegisterRequest;
 use App\Http\Requests\Doctor\Auth\AuthRequest;
+use App\Http\Resources\PatientResource;
 use App\Http\Resources\UserResource;
 use App\Models\Patient;
 use App\Models\User;
@@ -23,13 +24,17 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'age' => $request->age,
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'gender' => $request->gender,
         ]);
 
         $token = $user->createToken('api_token')->plainTextToken;
 
         return ApiResponse::success([
             'token' => $token,
-            'user' => new UserResource($user),
+            'user' => new PatientResource($user),
         ], __('custom.login_successful'), 200);
     }
     public function login(AuthRequest $request)
