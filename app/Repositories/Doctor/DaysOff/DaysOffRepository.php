@@ -14,7 +14,7 @@ class DaysOffRepository implements DaysOffRepositoryInterface
     }
     public function getDaysOffById($id)
     {
-        return DaysOff::select('id' , 'day')->findOrFail($id);
+        return DaysOff::select('id' , 'day')->find($id);
     }
     public function storeDaysOff($data)
     {

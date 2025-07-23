@@ -49,6 +49,7 @@ class AppointmentRequest extends FormRequest
 
         if($this->isMethod('put')) {
             $data['symptoms_duration'] = 'nullable|in:less_than_24_hours,from_1_to_3_days,more_than_3_days';
+            
         }
 
         return $data;

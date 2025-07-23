@@ -14,7 +14,7 @@ class VacationRepository implements VacationRepositoryInterface
     }
     public function getVacationById($id)
     {
-        return Vacation::select('id' , 'date')->findOrFail($id);
+        return Vacation::select('id' , 'date')->find($id);
     }
     public function storeVacation($data)
     {

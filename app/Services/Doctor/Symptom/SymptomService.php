@@ -27,20 +27,6 @@ class SymptomService implements SymptomServiceInterface
             return ApiResponse::error('Error fetching symptoms', 500);
         }
     }
-    public function getSymptomById($id){
-        try{
-            $symptom = $this->symptomRepository->getSymptomById($id);
-            if(!$symptom) {
-                return ApiResponse::error('Symptom not found', 404);
-            }
-            return ApiResponse::success([
-                'symptom' => new GeneralResource($symptom),
-            ], 'Symptom fetched successfully', 200);
-        } catch (\Exception $e) {
-            // Handle exception
-            return ApiResponse::error('Error fetching symptom', 500);
-        }
-    }
     public function storeSymptom($data){
         try{
             $symptom = $this->symptomRepository->storeSymptom($data);

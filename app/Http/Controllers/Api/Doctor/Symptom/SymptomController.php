@@ -18,10 +18,6 @@ class SymptomController extends Controller
     {
         return $this->symptomService->getAllSymptoms();
     }
-    public function show($id)
-    {
-        return $this->symptomService->getSymptomById($id);
-    }
     public function store(SymptomRequest $request)
     {
         // Logic to create a new symptom

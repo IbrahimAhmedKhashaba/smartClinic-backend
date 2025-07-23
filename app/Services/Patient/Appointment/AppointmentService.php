@@ -61,13 +61,13 @@ class AppointmentService implements AppointmentServiceInterface
     }
     public function storeAppointment($data)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
 
         $settings = $this->appointmentRepository->getSettings();
 
         $appointmentsCountAtDate = $this->appointmentRepository->getAppointmentsCount($data['date']);        
-        // dd($appointmentsCountAtDate);
+        
         $check = $this->canBookOnDate($data['date'], $settings->daily_appointments_limit, $appointmentsCountAtDate);
         if(!$check['status']){
             return ApiResponse::error($check['message'], 400);
@@ -90,16 +90,19 @@ class AppointmentService implements AppointmentServiceInterface
         return ApiResponse::success([
             'Appointment' => new AppointmentResource($appointment),
         ], 'Appointment created successfully', 201);
-        // } catch (\Exception $e) {
-        //     DB::rollBack();
-        //     return ApiResponse::error('Error creating Appointment', 500);
-        // }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return ApiResponse::error('Error creating Appointment', 500);
+        }
     }
     public function updateAppointment($id, $data)
     {
         DB::beginTransaction();
         try {
             $appointment = $this->appointmentRepository->getAppointmentById($id);
+            if (!$appointment) {
+                return ApiResponse::error('Appointment not found', 404);
+            }
             if (!$this->checkAppointmentPatient($appointment)) {
                 return ApiResponse::error("You don't have permission to access this appointment", 403);
             }
@@ -144,7 +147,7 @@ class AppointmentService implements AppointmentServiceInterface
 
     public function checkAppointmentPatient($appointment)
     {
-        return $appointment->patient_id = Auth::guard('patient')->id() ? true : false;
+        return $appointment->patient_id == Auth::guard('patient')->id();
     }
 
     public function canBookOnDate($date, $appointmentsLimit, $appointmentsCountAtDate)

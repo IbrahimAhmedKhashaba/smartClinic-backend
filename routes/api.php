@@ -23,7 +23,7 @@ Route::prefix('/doctor')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('vacations', VacationController::class)->except(['show']);
         Route::apiResource('days-offs', DaysOffController::class)->except(['show']);
-        Route::apiResource('symptoms', SymptomController::class);
+        Route::apiResource('symptoms', SymptomController::class)->except(['show']);
         Route::apiResource('diseases', DiseaseController::class);
         Route::apiResource('contacts', ContactController::class)->except(['store', 'update']);
         Route::apiResource('appointments', AppointmentController::class);

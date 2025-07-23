@@ -56,7 +56,7 @@ class AuthController extends Controller
 
     public function profile(Request $request)
     {
-        return new UserResource(Auth::guard('patient')->user());
+        return new PatientResource(Auth::guard('patient')->user());
     }
 
     public function logout(Request $request)

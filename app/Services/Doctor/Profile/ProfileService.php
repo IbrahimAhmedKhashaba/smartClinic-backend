@@ -37,6 +37,7 @@ class ProfileService implements ProfileServiceInterface
             if (!$Profile) {
                 return ApiResponse::error('Error updating Profile', 500);
             }
+            $Profile->refresh();
             return ApiResponse::success([
                 'Profile' => new UserResource($Profile),
             ], 'Profile updated successfully', 200);

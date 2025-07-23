@@ -50,6 +50,7 @@ class AppointmentRepository implements AppointmentRepositoryInterface
     public function updateAppointment($appointment, $data)
     {
         $appointment->symptoms_duration = $data['symptoms_duration'] ?? $appointment['symptoms_duration'];
+        $appointment->date = $data['date'] ?? $appointment['date'];
         $appointment->save();
         return $appointment;
     }
