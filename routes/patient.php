@@ -2,7 +2,11 @@
 
 use App\Http\Controllers\Api\Patient\Auth\AuthController;
 use App\Http\Controllers\Api\Patient\Appointment\AppointmentController;
+use App\Http\Controllers\Api\Patient\Profile\ProfileController;
+use App\Http\Controllers\Api\WebSite\Contact\ContactController;
 use Illuminate\Support\Facades\Route;
+
+Route::post('contacts' , ContactController::class);
 
 Route::prefix('/patient/auth')->group(function () {
     Route::post('register', [AuthController::class, 'register']);
@@ -20,5 +24,9 @@ Route::group(
     ],
     function () {
         Route::apiResource('appointments', AppointmentController::class);
+        Route::get('profile', [ProfileController::class, 'getProfile']);
+        Route::post('profile', [ProfileController::class, 'updateProfile']);
+        Route::post('profile/password', [ProfileController::class, 'updatePassword']);
     }
 );
+

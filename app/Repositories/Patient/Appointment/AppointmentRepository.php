@@ -4,7 +4,9 @@ namespace App\Repositories\Patient\Appointment;
 
 use App\Interfaces\Patient\Repositories\Appointment\AppointmentRepositoryInterface;
 use App\Models\Appointment;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AppointmentRepository implements AppointmentRepositoryInterface
 {
@@ -20,7 +22,7 @@ class AppointmentRepository implements AppointmentRepositoryInterface
             'medications',
             'drugs',
         )->where('patient_id', Auth::id())
-        ->paginate(10);
+            ->paginate(10);
     }
     public function getAppointmentById($id)
     {
@@ -33,13 +35,15 @@ class AppointmentRepository implements AppointmentRepositoryInterface
             'medications',
             'drugs',
         )->where('patient_id', Auth::id())
-        ->find($id);
+            ->find($id);
     }
     public function storeAppointment($data)
     {
         $appointment = new Appointment();
         $appointment->patient_id = Auth::guard('patient')->id();
         $appointment->symptoms_duration = $data['symptoms_duration'];
+        $appointment->date = $data['date'];
+        $appointment->time = $data['time'];
         $appointment->save();
         return $appointment;
     }
@@ -53,7 +57,6 @@ class AppointmentRepository implements AppointmentRepositoryInterface
     {
         return $Appointment->delete();
     }
-
     public function getAppointmentsByPatientId($patientId)
     {
         return Appointment::where('patient_id', $patientId)
@@ -67,7 +70,6 @@ class AppointmentRepository implements AppointmentRepositoryInterface
                 'drugs'
             )->paginate(10);
     }
-
     public function syncSymptoms($appointment, $symptoms)
     {
         $appointment->symptoms()->delete();
@@ -75,7 +77,6 @@ class AppointmentRepository implements AppointmentRepositoryInterface
             $appointment->symptoms()->sync($symptoms);
         }
     }
-
     public function syncDiseases($appointment, $diseases)
     {
         $appointment->diseases()->delete();
@@ -83,7 +84,6 @@ class AppointmentRepository implements AppointmentRepositoryInterface
             $appointment->diseases()->sync($diseases);
         }
     }
-
     public function syncOtherSymptoms($appointment, $otherSymptoms)
     {
         $appointment->other_symptoms()->delete();
@@ -96,7 +96,6 @@ class AppointmentRepository implements AppointmentRepositoryInterface
             }
         }
     }
-
     public function syncOtherDiseases($appointment, $otherDiseases)
     {
         $appointment->other_diseases()->delete();
@@ -109,7 +108,6 @@ class AppointmentRepository implements AppointmentRepositoryInterface
             }
         }
     }
-
     public function syncMedications($appointment, $medications)
     {
         $appointment->medications()->delete();
@@ -122,7 +120,6 @@ class AppointmentRepository implements AppointmentRepositoryInterface
             }
         }
     }
-
     public function syncDrugs($appointment, $drugs)
     {
         $appointment->drugs()->delete();
@@ -134,5 +131,30 @@ class AppointmentRepository implements AppointmentRepositoryInterface
                 ]);
             }
         }
+    }
+    public function checkDaysOff($dayNameEn)
+    {
+        return DB::table('days_offs')
+            ->whereJsonContains('day->en', $dayNameEn)
+            ->exists();
+    }
+    public function checkVacation($date)
+    {
+        return DB::table('vacations')
+            ->whereDate('date', $date)
+            ->exists();
+    }
+    public function getAppointmentsCount($date)
+    {
+        return DB::table('appointments')
+            ->whereDate('date', $date)
+            ->count();
+    }
+    public function getSettings(){
+        return Setting::select([
+            'daily_appointments_limit',
+            'appointment_duration',
+            'open_time',
+        ])->first();
     }
 }

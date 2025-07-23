@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('patient_id')->constrained()->onDelete('cascade');
             $table->integer('symptoms_duration')->default('2');
             $table->integer('status')->default(0);
+            $table->date('date');
+            $table->string('time');
             
             $table->timestamps();
         });

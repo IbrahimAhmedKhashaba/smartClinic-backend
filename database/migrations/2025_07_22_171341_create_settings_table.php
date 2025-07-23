@@ -13,6 +13,20 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
+
+            $table->string('about');
+            $table->string('email');
+            $table->string('phone');
+            $table->string('address');
+            
+            $table->string('facebook');
+            $table->string('whatsapp');
+            
+            $table->string('open_time');
+            $table->string('close_time');
+            $table->integer('daily_appointments_limit')->default('20');
+            $table->integer('appointment_duration')->default('10');
+            
             $table->timestamps();
         });
     }

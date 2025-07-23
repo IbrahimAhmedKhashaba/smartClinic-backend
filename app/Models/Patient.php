@@ -57,7 +57,7 @@ class Patient extends Authenticatable
     function gender():Attribute{
         return Attribute::make(
             get: fn($value) => $value == 0 ? __('custom.male') : __('custom.female'),
-            set: fn ($value) => $value === 'male' ? 0 : 1,
+            set: fn ($value) => $value == 'male' ? 0 : 1,
         );
     }
 }

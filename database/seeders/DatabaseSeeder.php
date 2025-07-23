@@ -23,5 +23,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call(SymptomSeeder::class);
         $this->call(DiseaseSeeder::class);
+        $this->call(DaysOffSeeder::class);
     }
 }

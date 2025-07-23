@@ -12,6 +12,8 @@ class Appointment extends Model
         'patient_id',
         'symptoms_durations',
         'status',
+        'date',
+        'time',
     ];
 
     function status(): Attribute

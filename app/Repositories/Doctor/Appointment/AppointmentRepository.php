@@ -94,4 +94,8 @@ class AppointmentRepository implements AppointmentRepositoryInterface
                 'drugs',
             )->paginate(10);
     }
+    public function incrementNumOfVisits($patient){
+        $patient->num_of_visits++;
+        return $patient->save();
+    }
 }

@@ -3,7 +3,7 @@
 namespace App\Services\Doctor\Symptom;
 
 use App\Helpers\ApiResponse;
-use App\Http\Resources\SymptomResource;
+use App\Http\Resources\GeneralResource;
 use App\Interfaces\Doctor\Repositories\Symptom\SymptomRepositoryInterface;
 use App\Interfaces\Doctor\Services\Symptom\SymptomServiceInterface;
 
@@ -20,7 +20,7 @@ class SymptomService implements SymptomServiceInterface
         try{
             $symptoms = $this->symptomRepository->getAllSymptoms();
             return ApiResponse::success([
-                'symptoms' => SymptomResource::collection($symptoms),
+                'symptoms' => GeneralResource::collection($symptoms),
             ], 'Symptoms fetched successfully' , 200);
         } catch (\Exception $e) {
             // Handle exception
@@ -34,7 +34,7 @@ class SymptomService implements SymptomServiceInterface
                 return ApiResponse::error('Symptom not found', 404);
             }
             return ApiResponse::success([
-                'symptom' => new SymptomResource($symptom),
+                'symptom' => new GeneralResource($symptom),
             ], 'Symptom fetched successfully', 200);
         } catch (\Exception $e) {
             // Handle exception
@@ -45,7 +45,7 @@ class SymptomService implements SymptomServiceInterface
         try{
             $symptom = $this->symptomRepository->storeSymptom($data);
             return ApiResponse::success([
-                'symptom' => new SymptomResource($symptom),
+                'symptom' => new GeneralResource($symptom),
             ], 'Symptom created successfully', 201);
         } catch (\Exception $e) {
             // Handle exception
@@ -63,7 +63,7 @@ class SymptomService implements SymptomServiceInterface
                 return ApiResponse::error('Error updating symptom', 500);
             }
             return ApiResponse::success([
-                'symptom' => new SymptomResource($symptom),
+                'symptom' => new GeneralResource($symptom),
             ], 'Symptom updated successfully', 200);
         } catch (\Exception $e) {
             return ApiResponse::error('Error updating symptom', 500);

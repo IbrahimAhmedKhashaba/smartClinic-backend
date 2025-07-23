@@ -4,11 +4,11 @@ namespace App\Services\patient\Appointment;
 
 use App\Helpers\ApiResponse;
 use App\Http\Resources\AppointmentResource;
-use App\Interfaces\patient\Repositories\Appointment\AppointmentReositoryInterface;
 use App\Interfaces\Patient\Repositories\Appointment\AppointmentRepositoryInterface;
 use App\Interfaces\Patient\Services\Appointment\AppointmentServiceInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class AppointmentService implements AppointmentServiceInterface
 {
@@ -61,27 +61,39 @@ class AppointmentService implements AppointmentServiceInterface
     }
     public function storeAppointment($data)
     {
-        DB::beginTransaction();
-        try {
-            $appointment = $this->appointmentRepository->storeAppointment($data);
+        // DB::beginTransaction();
+        // try {
 
-            $this->appointmentRepository->syncSymptoms($appointment, $data['symptoms'] ?? []);
-            $this->appointmentRepository->syncOtherSymptoms($appointment, $data['other_symptoms'] ?? []);
+        $settings = $this->appointmentRepository->getSettings();
 
-            $this->appointmentRepository->syncDiseases($appointment, $data['diseases'] ?? []);
-            $this->appointmentRepository->syncOtherDiseases($appointment, $data['other_diseases'] ?? []);
-
-            $this->appointmentRepository->syncMedications($appointment, $data['medications'] ?? []);
-            $this->appointmentRepository->syncDrugs($appointment, $data['drugs'] ?? []);
-
-            DB::commit();
-            return ApiResponse::success([
-                'Appointment' => new AppointmentResource($appointment),
-            ], 'Appointment created successfully', 201);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return ApiResponse::error('Error creating Appointment', 500);
+        $appointmentsCountAtDate = $this->appointmentRepository->getAppointmentsCount($data['date']);        
+        // dd($appointmentsCountAtDate);
+        $check = $this->canBookOnDate($data['date'], $settings->daily_appointments_limit, $appointmentsCountAtDate);
+        if(!$check['status']){
+            return ApiResponse::error($check['message'], 400);
         }
+
+        $data['time'] = $this->calcTime($appointmentsCountAtDate, $settings->appointment_duration, $settings->open_time);
+
+        $appointment = $this->appointmentRepository->storeAppointment($data);
+
+        $this->appointmentRepository->syncSymptoms($appointment, $data['symptoms'] ?? []);
+        $this->appointmentRepository->syncOtherSymptoms($appointment, $data['other_symptoms'] ?? []);
+
+        $this->appointmentRepository->syncDiseases($appointment, $data['diseases'] ?? []);
+        $this->appointmentRepository->syncOtherDiseases($appointment, $data['other_diseases'] ?? []);
+
+        $this->appointmentRepository->syncMedications($appointment, $data['medications'] ?? []);
+        $this->appointmentRepository->syncDrugs($appointment, $data['drugs'] ?? []);
+
+        DB::commit();
+        return ApiResponse::success([
+            'Appointment' => new AppointmentResource($appointment),
+        ], 'Appointment created successfully', 201);
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
+        //     return ApiResponse::error('Error creating Appointment', 500);
+        // }
     }
     public function updateAppointment($id, $data)
     {
@@ -133,5 +145,56 @@ class AppointmentService implements AppointmentServiceInterface
     public function checkAppointmentPatient($appointment)
     {
         return $appointment->patient_id = Auth::guard('patient')->id() ? true : false;
+    }
+
+    public function canBookOnDate($date, $appointmentsLimit, $appointmentsCountAtDate)
+    {
+        $carbonDate = Carbon::parse($date);
+        $dayNameEn = $carbonDate->englishDayOfWeek;
+
+        if(!$this->checkDaysOff($dayNameEn)){
+            return [
+                'status' => false,
+                'message' => 'This is a day off',
+            ];
+        }
+        elseif(!$this->checkVacation($date)){
+            return [
+                'status' => false,
+                'message' => 'This is a special off',
+            ];
+        }
+        elseif($this->checkAppointmentsLimited($appointmentsLimit, $appointmentsCountAtDate)){
+            return [
+                'status' => false,
+                'message' => 'appointments are completed in this day',
+            ];
+        }
+        return [
+            'status' => true,
+        ];
+    }
+
+    public function checkDaysOff($dayNameEn)
+    {
+
+        return !$this->appointmentRepository->checkDaysOff($dayNameEn);
+    }
+
+    public function checkVacation($date)
+    {
+        return !$this->appointmentRepository->checkVacation($date);
+    }
+
+    public function checkAppointmentsLimited($appointmentsLimit, $appointmentsCountAtDate)
+    {
+        return $appointmentsCountAtDate >= $appointmentsLimit;
+    }
+
+    public function calcTime($appointmentsCountAtDate, $avgDurationForAppointment, $open_time)
+    {
+        $carbonTime = Carbon::createFromFormat('g A', $open_time);
+        $newTime = $carbonTime->addMinutes($appointmentsCountAtDate * $avgDurationForAppointment);
+        return $newTime->format('g:i A');
     }
 }

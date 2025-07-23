@@ -24,4 +24,9 @@ interface AppointmentRepositoryInterface
     public function syncMedications($appointment, $medications);
 
     public function syncDrugs($appointment, $drugs);
+
+    public function checkDaysOff($dayNameEn);
+    public function checkVacation($date);
+    public function getAppointmentsCount($date);
+    public function getSettings();
 }

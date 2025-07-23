@@ -13,6 +13,8 @@ class AppointmentResource extends JsonResource
             'id' => $this->id,
             'patient' => new PatientResource($this->whenLoaded('patient')),
             'status' => $this->status,
+            'date' => $this->date,
+            'expected_time' => $this->time,
             'created_at' => $this->created_at,
             'symptoms' => GeneralResource::collection($this->whenLoaded('symptoms')),
             'other_symptoms' => GeneralResource::collection($this->whenLoaded('other_symptoms')),

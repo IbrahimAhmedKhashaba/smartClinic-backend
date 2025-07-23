@@ -12,7 +12,7 @@ class AppointmentRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::guard('patient')->check();
+        return true;
     }
 
     /**
@@ -26,6 +26,7 @@ class AppointmentRequest extends FormRequest
             //
             'symptoms_duration' => 'required|in:less_than_24_hours,from_1_to_3_days,more_than_3_days',
             'status' => 'nullable|in:waiting,checked,lated',
+            'date' => 'required|date',
 
             'symptoms' => 'nullable|array',
             'symptoms.*' => 'nullable|exists:symptoms,id',

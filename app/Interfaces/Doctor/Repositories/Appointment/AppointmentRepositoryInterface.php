@@ -13,4 +13,5 @@ interface AppointmentRepositoryInterface
     public function getWaitingAppointments();
     public function getCheckedAppointments();
     public function getLatedAppointments();
+    public function incrementNumOfVisits($patient);
 }

@@ -4,6 +4,7 @@ namespace App\Services\Doctor\Appointment;
 
 use App\Helpers\ApiResponse;
 use App\Http\Resources\AppointmentResource;
+use App\Http\Resources\PatientResource;
 use App\Interfaces\Doctor\Repositories\Appointment\AppointmentRepositoryInterface;
 use App\Interfaces\Doctor\Services\Appointment\AppointmentServiceInterface;
 use Illuminate\Support\Facades\DB;
@@ -59,8 +60,16 @@ class AppointmentService implements AppointmentServiceInterface
         DB::beginTransaction();
         try {
             $appointment = $this->appointmentRepository->getAppointmentById($id);
-            $this->appointmentRepository->updateAppointmentStatus($appointment, $data['status']);
+            if(!$appointment){
+                return ApiResponse::error('Appointment not found', 404);
+            }
             
+            if($data['status'] == 'checked' && $appointment['status']!= __('custom.checked')){
+                $this->appointmentRepository->incrementNumOfVisits($appointment->patient);
+            }
+            $this->appointmentRepository->updateAppointmentStatus($appointment, $data['status']);
+            $appointment->refresh();
+
             DB::commit();
             return ApiResponse::success([
                 'Appointment' => new AppointmentResource($appointment),
