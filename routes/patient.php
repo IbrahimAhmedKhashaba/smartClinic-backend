@@ -4,8 +4,10 @@ use App\Http\Controllers\Api\Patient\Auth\AuthController;
 use App\Http\Controllers\Api\Patient\Appointment\AppointmentController;
 use App\Http\Controllers\Api\Patient\Profile\ProfileController;
 use App\Http\Controllers\Api\WebSite\Contact\ContactController;
+use App\Http\Controllers\Api\WebSite\Home\HomeController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('home' , HomeController::class);
 Route::post('contacts' , ContactController::class);
 
 Route::prefix('/patient/auth')->group(function () {

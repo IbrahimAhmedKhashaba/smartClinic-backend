@@ -19,7 +19,9 @@ use App\Interfaces\Patient\Repositories\Profile\ProfileRepositoryInterface as Pr
 use App\Interfaces\Patient\Services\Appointment\AppointmentServiceInterface;
 use App\Interfaces\Patient\Services\Profile\ProfileServiceInterface as ProfileProfileServiceInterface;
 use App\Interfaces\WebSite\Repositories\Contact\ContactRepositoryInterface;
+use App\Interfaces\WebSite\Repositories\Home\HomeRepositoryInterface;
 use App\Interfaces\WebSite\Services\Contact\ContactServiceInterface;
+use App\Interfaces\WebSite\Services\Home\HomeServiceInterface;
 use App\Repositories\Doctor\Contact\ContactRepository as ContactContactRepository;
 use App\Repositories\Doctor\DaysOff\DaysOffRepository;
 use App\Repositories\Doctor\Disease\DiseaseRepository;
@@ -29,6 +31,7 @@ use App\Repositories\Doctor\Vacation\VacationRepository;
 use App\Repositories\Patient\Appointment\AppointmentRepository;
 use App\Repositories\Patient\Profile\ProfileRepository as ProfileProfileRepository;
 use App\Repositories\WebSite\Contact\ContactRepository;
+use App\Repositories\WebSite\Home\HomeRepository;
 use App\Services\Doctor\Contact\ContactService as ContactContactService;
 use App\Services\Doctor\DaysOff\DaysOffService;
 use App\Services\Doctor\Disease\DiseaseService;
@@ -38,6 +41,7 @@ use App\Services\Doctor\Vacation\VacationService;
 use App\Services\patient\Appointment\AppointmentService;
 use App\Services\Patient\Profile\ProfileService as ProfileProfileService;
 use App\Services\WebSite\Contact\ContactService;
+use App\Services\WebSite\Home\HomeService;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -76,5 +80,8 @@ class RepositoryServiceProvider extends ServiceProvider
         
         $this->app->bind(ContactContactRepositoryInterface::class, ContactContactRepository::class);
         $this->app->bind(ContactContactServiceInterface::class, ContactContactService::class);
+        
+        $this->app->bind(HomeRepositoryInterface::class, HomeRepository::class);
+        $this->app->bind(HomeServiceInterface::class, HomeService::class);
     }
 }

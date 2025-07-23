@@ -18,10 +18,11 @@ class SettingResource extends JsonResource
             'about' => $this->about,
             'email' => $this->email,
             'phone' => $this->phone,
+            'address' => $this->address,
             'facebook' => $this->facebook,
             'whatsapp' => $this->whatsapp,
-            'daily_appointments_limit' => $this->daily_appointments_limit,
-            'appointment_duration' => $this->appointment_duration,
+            'daily_appointments_limit' => $this->whenLoaded($this->daily_appointments_limit),
+            'appointment_duration' => $this->whenLoaded($this->appointment_duration),
         ];
     }
 }
