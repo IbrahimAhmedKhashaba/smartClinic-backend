@@ -83,28 +83,6 @@
 
 ---
 
-## ⚙️ التثبيت | Installation
-
-> ⚠️ يتطلب PHP 8.1 أو أعلى، و Composer، و Node.js + NPM
-
-```bash
-git clone https://github.com/IbrahimAhmedKhashaba/smartClinic-backend.git
-cd clinic-system
-
-# إعداد البيئة
-cp .env.example .env
-php artisan key:generate
-
-# إعداد قاعدة البيانات
-php artisan migrate --seed
-
-# تثبيت الباك اند
-composer install
-
-# تشغيل النظام
-php artisan serve
-
----
 
 ## 💡 اقتراحات مستقبلية لتطوير النظام
 
@@ -160,3 +138,27 @@ php artisan serve
 البريد الإلكتروني: ibrahimahmedkhashaba@gmail.com
 
 واتساب: +201124782711
+
+
+---
+
+## ⚙️ التثبيت | Installation
+
+> ⚠️ يتطلب PHP 8.1 أو أعلى، و Composer، و Node.js + NPM
+
+```bash
+git clone https://github.com/IbrahimAhmedKhashaba/smartClinic-backend.git
+cd clinic-system
+
+# إعداد البيئة
+cp .env.example .env
+php artisan key:generate
+
+# إعداد قاعدة البيانات
+php artisan migrate --seed
+
+# تثبيت الباك اند
+composer install
+
+# تشغيل النظام
+php artisan serve
