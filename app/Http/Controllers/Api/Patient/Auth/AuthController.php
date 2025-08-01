@@ -50,7 +50,7 @@ class AuthController extends Controller
 
         return ApiResponse::success([
             'token' => $token,
-            'user' => new UserResource($user),
+            'user' => new PatientResource($user),
         ], __('custom.login_successful'), 200);
     }
 
