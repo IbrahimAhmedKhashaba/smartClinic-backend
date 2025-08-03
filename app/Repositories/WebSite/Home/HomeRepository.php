@@ -30,6 +30,6 @@ class HomeRepository implements HomeRepositoryInterface
     }
     public function getVacations()
     {
-        return Vacation::select('id', 'date')->get();
+        return Vacation::pluck('date');
     }
 }

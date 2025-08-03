@@ -16,7 +16,7 @@ class HomeService implements HomeServiceInterface
         $this->homeRepository = $homeRepository;
     }
     public function index(){
-        // try{
+        try{
             $settings = $this->homeRepository->getSettings();
             $daysOff = $this->homeRepository->getDaysOffs();
             $Vacations = $this->homeRepository->getVacations();
@@ -25,8 +25,8 @@ class HomeService implements HomeServiceInterface
                  'daysOff' => $daysOff,
                  'Vacations' => $Vacations,
             ] , 'Home Data Fetched successfully' , 200);
-        // } catch(\Exception $e){
-
-        // }
+        } catch(\Exception $e){
+            return ApiResponse::error('Internal Error' , 500);
+        }
     }
 }
