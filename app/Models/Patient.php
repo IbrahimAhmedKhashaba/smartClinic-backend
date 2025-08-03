@@ -60,4 +60,5 @@ class Patient extends Authenticatable
             set: fn ($value) => $value == 'male' ? 0 : 1,
         );
     }
+
 }

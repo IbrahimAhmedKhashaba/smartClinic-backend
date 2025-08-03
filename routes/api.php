@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Doctor\Auth\AuthController;
 use App\Http\Controllers\Api\Doctor\Contact\ContactController;
 use App\Http\Controllers\Api\Doctor\DaysOff\DaysOffController;
 use App\Http\Controllers\Api\Doctor\Disease\DiseaseController;
+use App\Http\Controllers\Api\Doctor\Patient\PatientController;
 use App\Http\Controllers\Api\Doctor\Profile\ProfileController;
 use App\Http\Controllers\Api\Doctor\Symptom\SymptomController;
 use App\Http\Controllers\Api\Doctor\Vacation\VacationController;
@@ -27,6 +28,7 @@ Route::prefix('/doctor')->group(function () {
         Route::apiResource('diseases', DiseaseController::class);
         Route::apiResource('contacts', ContactController::class)->except(['store', 'update']);
         Route::apiResource('appointments', AppointmentController::class);
+        Route::apiResource('patients', PatientController::class);
         
         Route::controller(AppointmentController::class)->group(function () {
             Route::get('appointments/{id}/patient', 'getAppointmentsByPatientId');

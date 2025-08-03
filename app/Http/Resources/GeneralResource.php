@@ -15,7 +15,7 @@ class GeneralResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->whenLoaded($this->id),
+            'id' => $this->id,
             'name' => $this->name,
         ];
     }

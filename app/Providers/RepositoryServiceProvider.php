@@ -5,12 +5,14 @@ namespace App\Providers;
 use App\Interfaces\Doctor\Repositories\Contact\ContactRepositoryInterface as ContactContactRepositoryInterface;
 use App\Interfaces\Doctor\Repositories\DaysOff\DaysOffRepositoryInterface;
 use App\Interfaces\Doctor\Repositories\Disease\DiseaseRepositoryInterface;
+use App\Interfaces\Doctor\Repositories\Patient\PatientRepositoryInterface;
 use App\Interfaces\Doctor\Repositories\Profile\ProfileRepositoryInterface;
 use App\Interfaces\Doctor\Repositories\Symptom\SymptomRepositoryInterface;
 use App\Interfaces\Doctor\Repositories\Vacation\VacationRepositoryInterface;
 use App\Interfaces\Doctor\Services\Contact\ContactServiceInterface as ContactContactServiceInterface;
 use App\Interfaces\Doctor\Services\DaysOff\DaysOffServiceInterface;
 use App\Interfaces\Doctor\Services\Disease\DiseaseServiceInterface;
+use App\Interfaces\Doctor\Services\Patient\PatientServiceInterface;
 use App\Interfaces\Doctor\Services\Profile\ProfileServiceInterface;
 use App\Interfaces\Doctor\Services\Symptom\SymptomServiceInterface;
 use App\Interfaces\Doctor\Services\Vacation\VacationServiceInterface;
@@ -25,6 +27,7 @@ use App\Interfaces\WebSite\Services\Home\HomeServiceInterface;
 use App\Repositories\Doctor\Contact\ContactRepository as ContactContactRepository;
 use App\Repositories\Doctor\DaysOff\DaysOffRepository;
 use App\Repositories\Doctor\Disease\DiseaseRepository;
+use App\Repositories\Doctor\Patient\PatientRepository;
 use App\Repositories\Doctor\Profile\ProfileRepository;
 use App\Repositories\Doctor\Symptom\SymptomRepository;
 use App\Repositories\Doctor\Vacation\VacationRepository;
@@ -35,6 +38,7 @@ use App\Repositories\WebSite\Home\HomeRepository;
 use App\Services\Doctor\Contact\ContactService as ContactContactService;
 use App\Services\Doctor\DaysOff\DaysOffService;
 use App\Services\Doctor\Disease\DiseaseService;
+use App\Services\Doctor\Patient\PatientService;
 use App\Services\Doctor\Profile\ProfileService;
 use App\Services\Doctor\Symptom\SymptomService;
 use App\Services\Doctor\Vacation\VacationService;
@@ -83,5 +87,8 @@ class RepositoryServiceProvider extends ServiceProvider
         
         $this->app->bind(HomeRepositoryInterface::class, HomeRepository::class);
         $this->app->bind(HomeServiceInterface::class, HomeService::class);
+        
+        $this->app->bind(PatientRepositoryInterface::class, PatientRepository::class);
+        $this->app->bind(PatientServiceInterface::class, PatientService::class);
     }
 }
