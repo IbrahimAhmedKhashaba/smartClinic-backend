@@ -20,10 +20,12 @@ class HomeService implements HomeServiceInterface
             $settings = $this->homeRepository->getSettings();
             $daysOff = $this->homeRepository->getDaysOffs();
             $Vacations = $this->homeRepository->getVacations();
+            $completedDays = $this->homeRepository->getCompletedDays();
             return ApiResponse::success([
                 'settings' => new SettingResource($settings),
                  'daysOff' => $daysOff,
                  'Vacations' => $Vacations,
+                 'completedDays' => $completedDays,
             ] , 'Home Data Fetched successfully' , 200);
         } catch(\Exception $e){
             return ApiResponse::error('Internal Error' , 500);

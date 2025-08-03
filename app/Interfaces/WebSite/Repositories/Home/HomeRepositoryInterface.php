@@ -6,4 +6,5 @@ interface HomeRepositoryInterface{
     public function getSettings();
     public function getDaysOffs();
     public function getVacations();
+    public function getCompletedDays();
 }
